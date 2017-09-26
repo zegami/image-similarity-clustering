@@ -93,7 +93,8 @@ def start():
         features = filter(None, features)
 
         # write to a tab delimited file
-        source_filename = os.path.splitext(pargs.source)[0]
+        source_filename = os.path.splitext(pargs.source)[0].split(os.sep)[-1]
+
         with open(os.path.join(source_dir, '{}_features.tsv'.format(source_filename)), 'w') as output:
             w = csv.DictWriter(output, fieldnames=['id', 'features'], delimiter='\t', lineterminator='\n')
             w.writeheader()
