@@ -81,7 +81,7 @@ def main(argv):
         results = process(data, args.model)
 
         destination_dir = os.path.dirname(args.source)
-        source_filename = os.path.splitext(args.source)[0]
+        source_filename = os.path.splitext(args.source)[0].split(os.sep)[-1]
         tsv_name = os.path.join(destination_dir, '{}_tsne.tsv'.format(
             source_filename))
 
