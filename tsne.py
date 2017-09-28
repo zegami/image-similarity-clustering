@@ -53,11 +53,11 @@ def process(data, model):
     return results
 
 
-def write_tsv(results, output_tsv):
+def write_tsv(results, output_tsv, delimiter='\t'):
     # write to a tab delimited file
     with open(output_tsv, 'w') as output:
         w = csv.DictWriter(
-            output, fieldnames=['id', 'x', 'y'], delimiter='\t',
+            output, fieldnames=['id', 'x', 'y'], delimiter=delimiter,
             lineterminator='\n')
         w.writeheader()
         w.writerows(results)
@@ -69,23 +69,29 @@ def main(argv):
     parser.add_argument(
         '-l', '--limit', type=int, help='use subset of first N items')
     parser.add_argument(
+        '-d', '--delimiter',  help='delimiter to export', default='\t')
+    parser.add_argument(
         '--model', default='TSNE', type=named_model, help='use named model')
     args = parser.parse_args(argv[1:])
 
     try:
         # read in the data file
-        data = pandas.read_csv(args.source, sep='\t')
+        data = pandas.read_csv(args.source, sep=args.delimiter)
         if args.limit:
             data = data.iloc[:args.limit]
+
 
         results = process(data, args.model)
 
         destination_dir = os.path.dirname(args.source)
         source_filename = os.path.splitext(args.source)[0].split(os.sep)[-1]
-        tsv_name = os.path.join(destination_dir, '{}_tsne.tsv'.format(
-            source_filename))
+        ending = "tsv"
+        if args.delimiter == ",":
+            ending = "csv"
+        tsv_name = os.path.join(destination_dir, '{}_tsne.{}'.format(
+            source_filename, ending))
 
-        write_tsv(results, tsv_name)
+        write_tsv(results, tsv_name, args.delimiter)
     except EnvironmentError as e:
         sys.stderr.write('error: {}\n'.format(e))
         return 1
