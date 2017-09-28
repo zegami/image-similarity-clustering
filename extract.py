@@ -42,6 +42,7 @@ def named_model(name):
 parser = argparse.ArgumentParser(prog='Feature extractor')
 parser.add_argument('source', default=None, help='Path to the source metadata file')
 parser.add_argument('model', default='ResNet50', type=named_model, help='Name of the pre-trained model to use')
+parser.add_argument('--delimiter', default='\t', help='File delimiter to use, defult tab')
 
 pargs = parser.parse_args()
 
@@ -84,7 +85,7 @@ def get_feature(metadata):
 def start():
     try:
         # read the source file
-        data = pandas.read_csv(pargs.source, sep='\t')
+        data = pandas.read_csv(pargs.source, sep=pargs.delimiter)
 
         # extract features
         features = map(get_feature, data.T.to_dict().values())
@@ -94,9 +95,11 @@ def start():
 
         # write to a tab delimited file
         source_filename = os.path.splitext(pargs.source)[0].split(os.sep)[-1]
-
-        with open(os.path.join(source_dir, '{}_features.tsv'.format(source_filename)), 'w') as output:
-            w = csv.DictWriter(output, fieldnames=['id', 'features'], delimiter='\t', lineterminator='\n')
+        ending = "tsv"
+        if pargs.delimiter == ",":
+            ending = "csv"
+        with open(os.path.join(source_dir, '{}_features.{}'.format(source_filename, ending)), 'w') as output:
+            w = csv.DictWriter(output, fieldnames=['id', 'features'], delimiter=pargs.delimiter, lineterminator='\n')
             w.writeheader()
             w.writerows(features)
 
