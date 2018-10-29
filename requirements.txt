@@ -8,8 +8,8 @@ h5py==2.7.1
 html5lib==0.9999999
 Keras==2.1.5
 Markdown==2.6.11
-mkl-fft==1.0.2
-mkl-random==1.0.1
+# mkl-fft==1.0.2
+# mkl-random==1.0.1
 numpy==1.14.2
 pandas==0.22.0
 Pillow==5.1.0
