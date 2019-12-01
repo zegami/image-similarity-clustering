@@ -63,5 +63,5 @@ Specify your output file .tsv with the `--output` option.
 
 *Example:*
 ```
-extract.py --source features.tsv --output feature_plots.tsv
+tsne.py --source features.tsv --output feature_plots.tsv
 ```
