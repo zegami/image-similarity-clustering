@@ -14,7 +14,6 @@ from keras.preprocessing import image
 import numpy as np
 import pandas
 
-
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 
@@ -40,7 +39,10 @@ def named_model(name):
 
 
 parser = argparse.ArgumentParser(prog='Feature extractor')
-parser.add_argument('source', default=None, help='Path to the source metadata file')
+parser.add_argument('--source', default='example.tsv', help='Path to the source metadata file')
+parser.add_argument('--output', default='features.tsv', help='Path to the output file')
+parser.add_argument('--image_path', default='images', help='Path to the image files')
+
 parser.add_argument(
     'model',
     default='ResNet50',
@@ -51,15 +53,13 @@ parser.add_argument(
 
 pargs = parser.parse_args()
 
-source_dir = os.path.dirname(pargs.source)
-
 
 def get_feature(metadata):
     print('{}'.format(metadata['id']))
     try:
-        img_path = os.path.join(source_dir, 'images', metadata['image'])
+        img_path = os.path.join(pargs.image_path, metadata['image'])
         if os.path.isfile(img_path):
-            print('is file: {}'.format(img_path))
+            print('Found file: {}'.format(img_path))
             try:
                 # load image setting the image size to 224 x 224
                 img = image.load_img(img_path, target_size=(224, 224))
@@ -98,10 +98,7 @@ def start():
         # remove empty entries
         features = filter(None, features)
 
-        # write to a tab delimited file
-        source_filename = os.path.splitext(pargs.source)[0].split(os.sep)[-1]
-
-        with open(os.path.join(source_dir, '{}_features.tsv'.format(source_filename)), 'w') as output:
+        with open(pargs.output, 'w') as output:
             w = csv.DictWriter(output, fieldnames=['id', 'features'], delimiter='\t', lineterminator='\n')
             w.writeheader()
             w.writerows(features)

@@ -65,7 +65,8 @@ def write_tsv(results, output_tsv):
 
 def main(argv):
     parser = argparse.ArgumentParser(prog='TSNE')
-    parser.add_argument('source', help='path to the source metadata file')
+    parser.add_argument('--source', default='features.tsv', help='path to the source metadata file')
+    parser.add_argument('--output', default='feature_plots.tsv', help='path to the output file')
     parser.add_argument(
         '-l', '--limit', type=int, help='use subset of first N items')
     parser.add_argument(
@@ -80,10 +81,7 @@ def main(argv):
 
         results = process(data, args.model)
 
-        destination_dir = os.path.dirname(args.source)
-        source_filename = os.path.splitext(args.source)[0].split(os.sep)[-1]
-        tsv_name = os.path.join(destination_dir, '{}_tsne.tsv'.format(
-            source_filename))
+        tsv_name = os.path.join(args.output)
 
         write_tsv(results, tsv_name)
     except EnvironmentError as e:
