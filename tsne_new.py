@@ -21,8 +21,7 @@ def tsne(features, dims=2, write_to=None, tsne_kwargs={}):
     print('t-SNE: Reducing features to {} dimensions'.format(dims))
     
     # Don't consider the first unique ID column
-    features_salient = features.copy()
-    features_salient.drop(columns=[id_col_name])
+    features_salient = features.copy().drop(columns=[id_col_name], axis=1)
     
     reduced = pd.DataFrame(TSNE(**tsne_kwargs).fit_transform(features_salient))
     reduced.insert(0, id_col_name, features[[id_col_name]])

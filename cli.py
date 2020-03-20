@@ -16,21 +16,21 @@ from tsne_new import tsne
 def main(argv):
     parser = argparse.ArgumentParser()
     parser.add_argument('mode', help='extract | tsne | umap')
-    parser.add_argument('data', help='[extract]: Filepath to an image or folder containing images to extract features from. [tsne/umap]: Filepath to a .csv file to read into a DataFrame. ')
+    parser.add_argument('data', help='[features]: Filepath to an image or folder containing images to extract features from. [tsne/umap]: Filepath to a .csv file to read into a DataFrame. ')
     parser.add_argument('out', help='Output filepath of operation')
     parser.add_argument('--numeric-cols', '-n', help='[tsne/umap]: Numeric data column indices to perform math on. Ex: "B,C,F", use "all" to consider all columns (excluding optional unique-col).')
     parser.add_argument('--unique-col', '-u', help='[tsne/umap]: The column index containing unique IDs for each row (typically "ID" or "Name" column). Not required. Omitted from "all" numeric-cols')
     parser.add_argument('--reduce', '-r', help='[tsne/umap]: How many dimensions to reduce features to. Default is 2.', default='2')
-    parser.add_argument('--model', '-m', help='[extract]: Which model to use. ResNet50 | Xception | VGG16 | VGG19 | InceptionV3 | MobileNet. Default: ResNet50', default='ResNet50')
+    parser.add_argument('--model', '-m', help='[features]: Which model to use. ResNet50 | Xception | VGG16 | VGG19 | InceptionV3 | MobileNet. Default: ResNet50', default='ResNet50')
     
     args = parser.parse_args(argv[1:])
     
     
     # === FEATURE EXTRACTION ===
     # We expect an image filepath or folder of images
-    if args.mode == 'extract':
+    if args.mode == 'features':
         assert os.path.exists(args.data),\
-            'Extract mode (data arg): File or directory not found: "{}"'\
+            'Features mode (data arg): File or directory not found: "{}"'\
             .format(args.data)
             
         # Calculate and write to args.out
