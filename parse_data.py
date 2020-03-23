@@ -10,7 +10,7 @@ import pandas as pd
 from utils import col_alpha_to_num, col_num_to_alpha
 
 
-def parse_data(data, numeric_cols=None, unique_col=None):
+def parse_data(data, feature_cols=None, unique_col=None):
     ''' Ensures we're dealing with a pandas DataFrame, and cuts the frame down
     to only the specified data. If no unique_col argument is provided, a new
     column at 'A' will be created called 'ID'.
@@ -18,15 +18,15 @@ def parse_data(data, numeric_cols=None, unique_col=None):
     Args:
         data (pd.DataFrame/str): Data to work with. Can be a DataFrame or a filepath to a .csv.
         
-        numeric_cols (str/list): Either a list of column strings like ['A', 'B', 'AB'], or 'all'.
+        feature_cols (str/list): Either a list of column strings like ['A', 'B', 'AB'], or 'all'.
         
-        unique_col (str): Optional. The index of the column containing unique keys, to be omitted from any mathemetical operations when numeric_cols='all' is used.
+        unique_col (str): Optional. The index of the column containing unique keys, to be omitted from any mathemetical operations when feature_cols='all' is used.
         
     Returns:
         (pd.DataFrame): The trimmed DataFrame, with the unique column in 'A'.
     '''
     
-    if numeric_cols is None:
+    if feature_cols is None:
         raise ValueError('Please provide either a list of feature column indices, '\
                          'such as ["B", "C", "AD"], or pass the string "all" to '\
                          'treat every column as numeric data. Pass a unique_col '\
@@ -45,11 +45,11 @@ def parse_data(data, numeric_cols=None, unique_col=None):
         raise ValueError('Parsing data: "data" arg is not a filepath or pd.DataFrame ({})'\
                          .format(type(data)))
     
-    # If passed 'all' for numeric_cols, figure out the column indices to use
-    if numeric_cols == 'all':
-        numeric_cols = [col_num_to_alpha(i) for i in list(range(len(data.columns)))]
+    # If passed 'all' for feature_cols, figure out the column indices to use
+    if feature_cols == 'all':
+        feature_cols = [col_num_to_alpha(i) for i in list(range(len(data.columns)))]
         if unique_col is not None:
-            numeric_cols.remove(unique_col)
+            feature_cols.remove(unique_col)
         
     # Shave the DataFrame into only salient data, the unique column forced to 'A'
     column_data_list = []
@@ -64,8 +64,8 @@ def parse_data(data, numeric_cols=None, unique_col=None):
         column_data_list.append(data[n])
         
     # Fill the numeric columns
-    for num_col in numeric_cols:
-        idx = col_alpha_to_num(num_col)
+    for feat_col in feature_cols:
+        idx = col_alpha_to_num(feat_col)
         col_name = data.columns[idx]
         column_data_list.append(data[col_name])
     

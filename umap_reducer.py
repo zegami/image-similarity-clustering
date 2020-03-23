@@ -9,7 +9,7 @@ from umap import UMAP
 import pandas as pd
 
 
-def umap(features, dims=2, write_to=None, tsne_kwargs={}):
+def umap(features, dims=2, write_to=None):
     ''' Reduces the features in the parsed pd.DataFrame 'features' into 'dims'
     dimensions (default 2). Writes the output to 'write_to' if provided, in
     .csv format. Returns the feature DataFrame.
