@@ -26,3 +26,42 @@ As stated in the above, it is imperetive you parse any data you want to reduce u
 
 ## Additional
 This project uses keras and tensorflow 2. I run these commands using tensorflow-gpu, so for the smoothest experience I recommend setting CUDA up from NVIDIA's website, I have not tested regular tensorflow (cpu).
+
+# Example usage
+
+## Reducing a folder of images using t-SNE
+I have some folder full of images at path `./images` that I want extract features from, and reduce into 2 dimensions using t-SNE.
+
+### CLI
+```
+python cli.py features "./images" "features.csv"
+python cli.py tsne "features.csv" "tsne-results.csv" --feature-cols all --unique-col A
+```
+
+### Scripting
+```
+from features import extract_features
+from tsne_reducer import tsne
+
+features = extract_features('./images')
+reduced = tsne(features, write_to='./tsne_features.csv')
+```
+
+## Reducing some numerical data columns using UMAP
+I have a csv file called `data.csv` containing a unique ID column (called "name") at column D, and the important columns containing numbers are at A, C, H, and AB.
+
+### CLI
+```
+python cli.py umap "./data.csv" "./tsne.csv" --feature-cols A,C,H,AB --unique-col D
+```
+
+### Scripting
+```
+from parse_data import parse_data
+from umap_reducer import umap
+
+data = parse_data('./data.csv', feauture_cols=['A', 'C', 'H', 'AB'], unique_col='D')
+reduced = umap(data, write_to='./umap_features.csv')
+```
+
+
