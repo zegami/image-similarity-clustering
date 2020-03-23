@@ -1,29 +1,31 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Mar 18 22:55:14 2020
+Created on Mon Mar 23 00:32:06 2020
 
 @author: dougl
 """
 
-from sklearn.manifold import TSNE
+from umap import UMAP
 import pandas as pd
-        
 
-def tsne(features, dims=2, write_to=None, tsne_kwargs={}):
+
+def umap(features, dims=2, write_to=None, tsne_kwargs={}):
     ''' Reduces the features in the parsed pd.DataFrame 'features' into 'dims'
     dimensions (default 2). Writes the output to 'write_to' if provided, in
     .csv format. Returns the feature DataFrame.
     '''
     
+    if dims != 2:
+        print('UMAP: Not currently supporting anything but 2-dim reduction')
+    
     id_col_name = features.columns[0]
-    tsne_kwargs['n_components'] = dims
         
-    print('t-SNE: Reducing features to {} dimensions'.format(dims))
+    print('UMAP: Reducing features to 2 dimensions'.format(dims))
     
     # Don't consider the first unique ID column
     features_salient = features.copy().drop(columns=[id_col_name], axis=1)
     
-    reduced = pd.DataFrame(TSNE(**tsne_kwargs).fit_transform(features_salient))
+    reduced = pd.DataFrame(UMAP().fit_transform(features_salient))
     reduced.insert(0, id_col_name, features[[id_col_name]])
     
     print('Success')

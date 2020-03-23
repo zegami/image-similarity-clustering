@@ -11,6 +11,7 @@ import os
 from parse_data import parse_data
 from features import extract_features
 from tsne_new import tsne
+from umap import umap
 
 
 def main(argv):
@@ -55,7 +56,7 @@ def main(argv):
             tsne(df, dims=int(args.reduce), write_to=args.out)
             
         elif args.mode == 'umap':
-            raise NotImplementedError('UMAP is not finished')
+            umap(df, write_to=args.out)
     
 
 if __name__ == '__main__':
