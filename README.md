@@ -23,3 +23,6 @@ to specify your own custom model soon.
 *It is worth reiterating:*
 
 As stated in the above, it is imperetive you parse any data you want to reduce using `parse_data` first if you're accessing these functions in your own scripts, and not using the CLI.
+
+## Additional
+This project uses keras and tensorflow 2. I run these commands using tensorflow-gpu, so for the smoothest experience I recommend setting CUDA up from NVIDIA's website, I have not tested regular tensorflow (cpu).
