@@ -104,7 +104,7 @@ def extract_features(filepath, model='ResNet50', write_to=None):
         print('\rProcessing: {:.2f}%\t\t'.format((i+1) / len(img_fps) * 100), end='', flush=True)
         features.append(_extract(fp, m))
     
-    print('\nDone!')
+    print('\nSuccess')
     
     # Make into a DataFrame and add an ID column
     features_df = DF(features, dtype=object)

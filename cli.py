@@ -10,7 +10,7 @@ import sys
 import os
 from parse_data import parse_data
 from features import extract_features
-from tsne_new import tsne
+from tsne import tsne
 from umap import umap
 
 
