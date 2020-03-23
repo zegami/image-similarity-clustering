@@ -20,7 +20,7 @@ def main(argv):
     parser.add_argument('data', help='[features]: Filepath to an image or folder containing images to extract features from. [tsne/umap]: Filepath to a .csv file to read into a DataFrame. ')
     parser.add_argument('out', help='Output filepath of operation')
     parser.add_argument('--feature-cols', '-f', help='[tsne/umap]: Numerical data column indices to treat as features. Ex: "B,C,F", use "all" to consider all columns (excluding optional unique-col).')
-    parser.add_argument('--unique-col', '-u', help='[tsne/umap]: The column index containing unique IDs for each row (typically "ID" or "Name" column). Not required. Omitted from "all" feature_cols')
+    parser.add_argument('--unique-col', '-u', help='[tsne/umap]: The column index containing unique IDs for each row (typically "ID" or "Name" column). Not required. Omitted from "all" feature-cols')
     parser.add_argument('--reduce', '-r', help='[tsne/umap]: How many dimensions to reduce features to. Default is 2.', default='2')
     parser.add_argument('--model', '-m', help='[features]: Which model to use. ResNet50 | Xception | VGG16 | VGG19 | InceptionV3 | MobileNet. Default: ResNet50', default='ResNet50')
     
@@ -45,7 +45,7 @@ def main(argv):
         # Make sure we know what columns are intended to be used numerically as a list of strings, or 'all'
         feature_cols = args.feature_cols
         if feature_cols is None:
-            raise Exception('Feature reduction mode: No data column indices provided. Example usage: "--feature_cols B,C,F", "--feature_cols all"')
+            raise Exception('Feature reduction mode: No data column indices provided. Example usage: "--feature-cols B,C,F", "--feature-cols all"')
         elif feature_cols != 'all':
             feature_cols = [s.strip() for s in feature_cols.split(',') if s.strip() != '']
         
