@@ -60,7 +60,7 @@ python cli.py umap "./data.csv" "./tsne.csv" --feature-cols A,C,H,AB --unique-co
 from parse_data import parse_data
 from umap_reducer import umap
 
-data = parse_data('./data.csv', feauture_cols=['A', 'C', 'H', 'AB'], unique_col='D')
+data = parse_data('./data.csv', feature_cols=['A', 'C', 'H', 'AB'], unique_col='D')
 reduced = umap(data, write_to='./umap_features.csv')
 ```
 
