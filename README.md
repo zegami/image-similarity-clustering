@@ -1,32 +1,67 @@
-# Unsupervised ML with Keras pre-trained models and t-SNE
-This project allows images to be automatically grouped into like clusters using a combination of machine learning techniques.
+# Unsupervised feature extraction and reduction
+This project allows numerical features to be reduced down to fewer dimensions for plotting using unsupervised machine learning.
+Features can be taken simply as face value numbers from a spreadsheet (csv) file, or they can be extracted from images using a pre-trained model.
 
-Unsupervised machine learning is a technique that can used to automatically classify or group data together that has no preidentified structure (as opposed to supervised learning where an "expert" has labeled a training data set).
+## CLI
+All functions in this package can be imported for use in your own python scripts, or run as stand-alone commands in a CLI.
 
-There are two steps involved in the process. The first is to use a pre-trained deep learning model to extract a **feature vector** of each image in the collection. Once we have the vector (which is an array of floating point values) it is then be passed into a t-SNE function, which takes all of the arrays and reduces them down to two values: **X** and **Y**. These two values can then be plotted against each other to produce a graph which Zegami can use as a filter.
+In order to deal with all inputs in a standardardised fashion, csv files are parsed using `parse_data` in `parse_data.py`.
+While this is done automatically for CLI commands, if you're writing your own scripts you should parse your csv data in
+through this first. It essentially puts your data in a pd.DataFrame, where the first column is always a unique ID key column.
 
-## extract.py
-Uses one of the [pre-trained deep learning models avaliable in Keras](https://keras.io/applications) to extract a feature vector for all images in a source directory.
+Current functionality:
+- `python cli.py features <image-or-directory-of-images> <output-csv-path>`
+- `python cli.py tsne <image-or-directory-of-images> <output-csv-path> <feature-cols> <unique-col>`
+- `python cli.py umap <image-or-directory-of-images> <output-csv-path> <feature-cols> <unique-col>`
 
-I used the following guide to [install Keras with TensorFlow](https://keras.io/#installation) using conda.
+Running 'features' will extract the numerical features of a directory of images, and save them (with the unique IDs) to the output path.
 
-The script expects as an argument the path to a tab separated file that has at a minimum a column called 'id' and another called 'image' which contains the file name. The images **need** to be located in a directory called **images** which is located in the same directory as the source file.
+Running 'tsne' or 'umap' will reduce such features (or features from a regular csv) into fewer dimensions, and save these (with the unique IDs) to the output path.
+These reduction functions will accept a `--model` argument, allowing you to specify one of several common pre-trained models to be used. I will probably add a command
+to specify your own custom model soon.
 
-For example if a file called example.tsv contains a single record:
+*It is worth reiterating:*
 
-| id | image |
-| -- |:-----:|
-| 1  | 1.jpg |
+As stated in the above, it is imperetive you parse any data you want to reduce using `parse_data` first if you're accessing these functions in your own scripts, and not using the CLI.
 
-Then it would have the following directory structure:
+## Additional
+This project uses keras and tensorflow 2. I run these commands using tensorflow-gpu, so for the smoothest experience I recommend setting CUDA up from NVIDIA's website, I have not tested regular tensorflow (cpu).
+
+# Example usage
+
+## Reducing a folder of images using t-SNE
+I have some folder full of images at path `./images` that I want extract features from, and reduce into 2 dimensions using t-SNE.
+
+### CLI
 ```
-.
-+-- example.tsv
-+-- images
-|   +-- 1.jpg
+python cli.py features "./images" "features.csv"
+python cli.py tsne "features.csv" "tsne-results.csv" --feature-cols all --unique-col A
 ```
 
-The results are saved to a tab separated file postfixed with '_features.
+### Scripting
+```
+from features import extract_features
+from tsne_reducer import tsne
 
-## tsne.py
-Takes a comma separated list of values and runs them through a t-SNE function. The result is then saved back to a tab separated file postfixed with '_tsne'.
+features = extract_features('./images')
+reduced = tsne(features, write_to='./tsne_features.csv')
+```
+
+## Reducing some numerical data columns using UMAP
+I have a csv file called `data.csv` containing a unique ID column (called "name") at column D, and the important columns containing numbers are at A, C, H, and AB.
+
+### CLI
+```
+python cli.py umap "./data.csv" "./tsne.csv" --feature-cols A,C,H,AB --unique-col D
+```
+
+### Scripting
+```
+from parse_data import parse_data
+from umap_reducer import umap
+
+data = parse_data('./data.csv', feature_cols=['A', 'C', 'H', 'AB'], unique_col='D')
+reduced = umap(data, write_to='./umap_features.csv')
+```
+
+
