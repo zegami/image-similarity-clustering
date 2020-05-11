@@ -25,7 +25,7 @@ def umap(features, dims=2, write_to=None):
     # Don't consider the first unique ID column
     features_salient = features.copy().drop(columns=[id_col_name], axis=1)
     
-    reduced = pd.DataFrame(UMAP(spread=0.5).fit_transform(features_salient))
+    reduced = pd.DataFrame(UMAP(spread=0.5).fit_transform(features_salient), dtype=object)
     reduced.insert(0, id_col_name, features[[id_col_name]])
     
     print('Success')
