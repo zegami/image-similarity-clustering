@@ -47,7 +47,7 @@ def _extract(fp, model):
         # Load the image, setting the size to 224 x 224
         img = image.load_img(fp, target_size=(224, 224))
         
-        # Convert the image to a numpy array, resize it (1, 2, 244, 244), and preprocess it
+        # Convert the image to a numpy array, resize it (1, 224, 224, 3), and preprocess it
         img_data = image.img_to_array(img)
         img_data = np.expand_dims(img_data, axis=0)
         img_data = preprocess_input(img_data)
