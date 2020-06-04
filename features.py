@@ -8,9 +8,9 @@ Created on Wed Mar 18 22:06:25 2020
 
 import os
 
-from keras import applications
-from keras.applications.resnet50 import preprocess_input
-from keras.preprocessing import image
+from tensorflow.keras import applications
+from tensorflow.keras.applications.resnet50 import preprocess_input
+from tensorflow.keras.preprocessing import image
 import numpy as np
 from pandas import DataFrame as DF
 
