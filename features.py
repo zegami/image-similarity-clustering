@@ -8,7 +8,7 @@ Created on Wed Mar 18 22:06:25 2020
 
 import os
 
-from tensorflow.keras import applications
+from tensorflow.keras import applications, models, Model
 from tensorflow.keras.applications.resnet50 import preprocess_input
 from tensorflow.keras.preprocessing import image
 import numpy as np
@@ -68,7 +68,23 @@ def extract_features(filepath, model='ResNet50', write_to=None):
     
     # Get the model
     print('Acquiring model "{}"'.format(model), end='')
-    m = named_model(model)
+    
+    if type(model) == str:
+        
+        # From filepath
+        if os.path.exists(model):
+            print('Assuming model argument is a filepath')
+            m = models.load_model(model)
+        
+        # From standard named models
+        else:
+            m = named_model(model)
+            
+    # Model already in memory
+    else:
+        m = model
+        
+    assert isinstance(m, Model), 'Model \'{}\' is not a tf.keras.Model'.format(model)
     print('\rAcquired model\t\t\t\t\t')
     
     # Get the image filepaths
