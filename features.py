@@ -78,10 +78,12 @@ def extract_features(filepath, model='ResNet50', write_to=None):
         
         # From standard named models
         else:
+            print('Assuming model argument is a named model')
             m = named_model(model)
             
     # Model already in memory
     else:
+        print('Assuming model argument is a loaded model')
         m = model
         
     assert isinstance(m, Model), 'Model \'{}\' is not a tf.keras.Model'.format(model)
