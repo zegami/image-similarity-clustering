@@ -67,7 +67,7 @@ def extract_features(filepath, model='ResNet50', write_to=None):
     print('Extracting features')
     
     # Get the model
-    print('Acquiring model "{}"'.format(model), end='')
+    print('Acquiring model "{}"'.format(model))
     
     if type(model) == str:
         
@@ -87,7 +87,7 @@ def extract_features(filepath, model='ResNet50', write_to=None):
         m = model
         
     assert isinstance(m, Model), 'Model \'{}\' is not a tf.keras.Model'.format(model)
-    print('\rAcquired model\t\t\t\t\t')
+    print('\rSuccessfully acquired model\t\t\t\t\t')
     
     # Get the image filepaths
     filepath = filepath.replace('\\', '/')
