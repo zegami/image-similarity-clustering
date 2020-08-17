@@ -7,6 +7,7 @@ Created on Wed Mar 18 22:06:25 2020
 
 
 import os
+from pathlib import Path
 
 from tensorflow.keras import applications, models, Model
 from tensorflow.keras.applications.resnet50 import preprocess_input
@@ -59,7 +60,7 @@ def _extract(fp, model):
         return np.char.mod('%f', np_features)
         
 
-def extract_features(filepath, model='ResNet50', write_to=None):
+def extract_features(filepath, model='ResNet50', write_to=None, recursive=False):
     ''' Reads an input image file, or directory containing images, and returns
     resulting extracted features. Use write_to=<some_filepath> to save the
     features somewhere. '''
@@ -103,10 +104,18 @@ def extract_features(filepath, model='ResNet50', write_to=None):
         img_fps = img_fps.append(filepath)
             
     elif os.path.isdir(filepath):
-        for fn in os.listdir(filepath):
-            ext = fn.rsplit('.', 1)[-1]
-            if ext in IMG_EXTS:
-                img_fps.append(os.path.join(filepath, fn))
+        
+        # Recursive search (ONLY WORKS FOR png, jpg)
+        if recursive:
+            print('Note: recursive=True mode only looks for .jpg, .png')
+            img_fps = [str(wp) for wp in list(Path(filepath).rglob("*.[pPjJ][nNpP][gG]"))]
+            
+        # Non-recursive search
+        else:
+            for fn in os.listdir(filepath):
+                ext = fn.rsplit('.', 1)[-1]
+                if ext in IMG_EXTS:
+                    img_fps.append(os.path.join(filepath, fn))
         
     else:
         raise ValueError('Filepath should be an image, or a directory containing images')
