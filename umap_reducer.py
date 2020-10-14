@@ -38,7 +38,7 @@ def umap(features, dims=2, write_to=None, **umap_kwargs):
     
     id_col_name = features.columns[0]
         
-    print('UMAP: Reducing features to 2 dimensions'.format(dims))
+    print('UMAP: Reducing features to {} dimensions'.format(dims))
     
     # Don't consider the first unique ID column
     features_salient = features.copy().drop(columns=[id_col_name], axis=1)
