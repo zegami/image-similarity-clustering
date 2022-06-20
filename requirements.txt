@@ -3,6 +3,6 @@ numpy==1.21.0
 pandas==0.24.1
 Pillow==9.0.1
 scipy==1.4.1
-tensorflow-gpu==2.5.3
+tensorflow-gpu==2.7.2
 Werkzeug==0.15.3
 umap-learn==0.3.10
