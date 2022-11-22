@@ -1,7 +1,7 @@
 Keras==2.3.1
 numpy==1.22.0
 pandas==0.24.1
-Pillow==9.0.1
+Pillow==9.3.0
 scipy==1.4.1
 tensorflow-gpu==2.7.2
 Werkzeug==0.15.3
